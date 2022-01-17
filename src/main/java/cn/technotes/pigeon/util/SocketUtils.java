@@ -5,6 +5,9 @@ import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 
  * 
@@ -13,6 +16,8 @@ import java.util.Random;
  * @version 1.0
  */
 public class SocketUtils {
+
+	private static Logger logger = LoggerFactory.getLogger(SocketUtils.class);
 
 	/**
 	 * 随机端口最新值
@@ -44,7 +49,7 @@ public class SocketUtils {
 			ds.setReuseAddress(true);
 			return false;
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("check bind port {} error {}", port, e);
 		} finally {
 			if (ds != null) {
 				ds.close();
@@ -54,7 +59,7 @@ public class SocketUtils {
 				try {
 					ss.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error("close ServerSocket port {} error {}", port, e);
 				}
 			}
 		}
