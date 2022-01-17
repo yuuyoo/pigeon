@@ -6,10 +6,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -18,22 +23,60 @@ import cn.technotes.pigeon.Constants;
 
 public class RootHandler implements HttpHandler {
 
+	private static Logger logger = LoggerFactory.getLogger(RootHandler.class);
+
 	public static final String RESOURCE_ROOT_DIRECTOR = new File("").getAbsolutePath();
 	public static final String DEFAULT_CHARSET = StandardCharsets.UTF_8.name();
 
 	@Override
 	public void handle(HttpExchange exchange) throws UnsupportedEncodingException {
+
+		InetSocketAddress address = exchange.getLocalAddress();
+		InetAddress inetAddress = address.getAddress();
+		String hostName = inetAddress.getHostName();
+		String ip = inetAddress.getHostAddress();
+		String method = exchange.getRequestMethod();
 		URI uri = exchange.getRequestURI();
+		logger.info("request info client hostName : {} ip : {} method : {} request uri : {}", hostName, ip, method, uri);
+
 		String path = uri.getPath();
 		String resource = RESOURCE_ROOT_DIRECTOR + path;
 		File file = new File(resource);
 
 		if (file.isFile()) {
 			fileHandler(exchange, file);
+			return;
 		}
 
 		if (file.isDirectory()) {
 			directoryHandler(exchange, path, file);
+			return;
+		}
+
+		notfoundHandler(exchange, resource);
+	}
+
+	private void notfoundHandler(HttpExchange exchange, String resource) {
+		logger.info("resource {} not exist", resource);
+		try (OutputStream os = exchange.getResponseBody()) {
+			StringBuilder builder = new StringBuilder();
+			builder.append("<!DOCTYPE html>");
+			builder.append("<html>");
+			builder.append("<head>");
+			builder.append("<meta http-equiv=\"Content-Type\" content=\"text/html\"; charset=\"utf-8\">");
+			builder.append("<title>Not Found</title>");
+			builder.append("</head>");
+			builder.append("<body bgcolor=\"white\">");
+			builder.append("<h1>Not Found</h1>");
+			builder.append("</body>");
+			builder.append("</html>");
+			String response = builder.toString();
+			exchange.getResponseHeaders().add("Content-Type:", "text/html;charset=utf-8");
+			byte[] bs = response.getBytes();
+			exchange.sendResponseHeaders(404, bs.length);
+			os.write(bs);
+		} catch (IOException e) {
+			logger.error("reponse 404 page error: {}", e);
 		}
 	}
 
@@ -60,7 +103,11 @@ public class RootHandler implements HttpHandler {
 				}
 				name = URLDecoder.decode(name, DEFAULT_CHARSET);
 
-				builder.append("<a href=\"" + URLEncoder.encode(name, DEFAULT_CHARSET) + "\">" + name);
+				builder.append("<a href=\"");
+				if (!path.equals(Constants.SLASH)) {
+					builder.append(path + Constants.SLASH);
+				}
+				builder.append(URLEncoder.encode(name, DEFAULT_CHARSET) + "\">" + name);
 				if (file.isDirectory()) {
 					builder.append(Constants.SLASH);
 				}
@@ -75,9 +122,8 @@ public class RootHandler implements HttpHandler {
 			byte[] bs = response.getBytes();
 			exchange.sendResponseHeaders(200, bs.length);
 			os.write(bs);
-			return;
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("directory {} handle error: {}", path, e);
 		}
 	}
 
@@ -89,11 +135,11 @@ public class RootHandler implements HttpHandler {
 			byte[] fileBytes = new byte[(int) file.length()];
 			inputStream.read(fileBytes);
 			os.write(fileBytes);
-			return;
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("file {} not exist", file.getName());
+
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("file {} handle error: {}", file.getName(), e);
 		}
 	}
 
