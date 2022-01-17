@@ -29,6 +29,7 @@ public class App {
 			server.start();
 
 			System.out.println("服务已启动，监听端口：" + port);
+			System.out.println("资源根目录：" + RootHandler.RESOURCE_ROOT_DIRECTOR);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
