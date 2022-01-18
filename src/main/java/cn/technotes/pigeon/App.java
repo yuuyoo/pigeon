@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.sun.net.httpserver.HttpServer;
 
+import cn.technotes.pigeon.core.Banner;
 import cn.technotes.pigeon.core.RootHandler;
 import cn.technotes.pigeon.util.SocketUtils;
 
@@ -23,8 +24,9 @@ public class App {
 	private static int TCP_CONNECTION_MAX = 0;
 
 	public static void main(String[] args) {
-		int port = 9090;
+		Banner.getInstance().print();
 
+		int port = 9090;
 		boolean isBind = SocketUtils.isBind(port);
 		if (isBind) {
 			logger.warn("Port {} was already in use.", port);

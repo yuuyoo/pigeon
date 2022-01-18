@@ -11,7 +11,6 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +25,6 @@ public class RootHandler implements HttpHandler {
 	private static Logger logger = LoggerFactory.getLogger(RootHandler.class);
 
 	public static final String RESOURCE_ROOT_DIRECTOR = new File("").getAbsolutePath();
-	public static final String DEFAULT_CHARSET = StandardCharsets.UTF_8.name();
 
 	@Override
 	public void handle(HttpExchange exchange) throws UnsupportedEncodingException {
@@ -101,13 +99,13 @@ public class RootHandler implements HttpHandler {
 				if (name.startsWith(Constants.DOT)) {
 					continue;
 				}
-				name = URLDecoder.decode(name, DEFAULT_CHARSET);
+				name = URLDecoder.decode(name, Constants.DEFAULT_CHARSET);
 
 				builder.append("<a href=\"");
 				if (!path.equals(Constants.SLASH)) {
 					builder.append(path + Constants.SLASH);
 				}
-				builder.append(URLEncoder.encode(name, DEFAULT_CHARSET) + "\">" + name);
+				builder.append(URLEncoder.encode(name, Constants.DEFAULT_CHARSET) + "\">" + name);
 				if (file.isDirectory()) {
 					builder.append(Constants.SLASH);
 				}
@@ -129,7 +127,7 @@ public class RootHandler implements HttpHandler {
 
 	private void fileHandler(HttpExchange exchange, File file) {
 		try (FileInputStream inputStream = new FileInputStream(file); OutputStream os = exchange.getResponseBody();) {
-			String fileName = URLEncoder.encode(file.getName(), DEFAULT_CHARSET);
+			String fileName = URLEncoder.encode(file.getName(), Constants.DEFAULT_CHARSET);
 			exchange.getResponseHeaders().add("Content-Disposition", "attachment;filename=" + fileName);
 			exchange.sendResponseHeaders(200, file.length());
 			byte[] fileBytes = new byte[(int) file.length()];
