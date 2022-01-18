@@ -5,9 +5,6 @@ import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.util.Random;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * 
  * 
@@ -16,8 +13,6 @@ import org.slf4j.LoggerFactory;
  * @version 1.0
  */
 public class SocketUtils {
-
-	private static Logger logger = LoggerFactory.getLogger(SocketUtils.class);
 
 	/**
 	 * 随机端口最新值
@@ -40,31 +35,15 @@ public class SocketUtils {
 	 * @date 2022年1月14日
 	 */
 	public static boolean isBind(int port) {
-		ServerSocket ss = null;
-		DatagramSocket ds = null;
-		try {
-			ss = new ServerSocket(port);
+		boolean result = false;
+		try (ServerSocket ss = new ServerSocket(port); DatagramSocket ds = new DatagramSocket(port);) {
 			ss.setReuseAddress(true);
-			ds = new DatagramSocket(port);
 			ds.setReuseAddress(true);
-			return false;
 		} catch (IOException e) {
-			logger.error("check bind port {} error {}", port, e);
-		} finally {
-			if (ds != null) {
-				ds.close();
-			}
-
-			if (ss != null) {
-				try {
-					ss.close();
-				} catch (IOException e) {
-					logger.error("close ServerSocket port {} error {}", port, e);
-				}
-			}
+			result = true;
 		}
 
-		return true;
+		return result;
 	}
 
 	/**
