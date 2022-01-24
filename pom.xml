@@ -20,6 +20,7 @@
 	</properties>
 
 	<dependencies>
+		<!-- 解决 HttpServer 警告 -->
 		<dependency>
 			<groupId>com.sun.net.httpserver</groupId>
 			<artifactId>http</artifactId>
@@ -37,18 +38,6 @@
 			<artifactId>logback-classic</artifactId>
 			<version>${logback.version}</version>
 		</dependency>
-
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>${commons-io.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${commons-lang3.version}</version>
-		</dependency>
-
 
 		<dependency>
 			<groupId>junit</groupId>

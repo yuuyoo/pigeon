@@ -18,8 +18,6 @@ import org.slf4j.LoggerFactory;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-import cn.technotes.pigeon.Constants;
-
 public class RootHandler implements HttpHandler {
 
 	private static Logger logger = LoggerFactory.getLogger(RootHandler.class);

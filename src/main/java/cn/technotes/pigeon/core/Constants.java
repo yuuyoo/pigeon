@@ -1,4 +1,4 @@
-package cn.technotes.pigeon;
+package cn.technotes.pigeon.core;
 
 import java.nio.charset.StandardCharsets;
 
