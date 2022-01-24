@@ -42,8 +42,8 @@ public class App {
 			server.setExecutor(null);
 			server.start();
 
-			logger.info("Server started on port: {} (http) with context path {} file resource root director {}", port, CONTEXT_PATH,
-					RootHandler.RESOURCE_ROOT_DIRECTOR);
+			logger.info("Server started on port: {} (http) with context path {}", port, CONTEXT_PATH);
+			logger.info("Server file resource root director: {}", RootHandler.RESOURCE_ROOT_DIRECTOR);
 
 		} catch (IOException e) {
 			logger.error("Server starting error {}", e);

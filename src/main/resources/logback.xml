@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration>
+	<property name="SERVER" value="pigeon" />
+	<property name="LOG_HOME" value="log" />
+	<property name="MAX_FILE_SIZE" value="20" />
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
@@ -9,7 +12,24 @@
 		</encoder>
 	</appender>
 
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${LOG_HOME}/${SERVER}.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<FileNamePattern>
+				${LOG_HOME}/${SERVER}.%d{yyyy-MM-dd}.%i.zip
+			</FileNamePattern>
+			<maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+		</rollingPolicy>
+
+		<encoder charset="UTF-8">
+			<pattern>
+				%date [%thread] %-5level %logger{80} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
 	<root level="debug">
 		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
 	</root>
 </configuration>
