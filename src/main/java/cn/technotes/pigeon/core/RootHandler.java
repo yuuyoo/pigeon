@@ -33,7 +33,7 @@ public class RootHandler implements HttpHandler {
 		String ip = inetAddress.getHostAddress();
 		String method = exchange.getRequestMethod();
 		URI uri = exchange.getRequestURI();
-		logger.info("request info client hostName : {} ip : {} method : {} request uri : {}", hostName, ip, method, uri);
+		logger.info("request info client ip : {} method : {} request uri : {}", hostName, ip, method, uri);
 
 		String path = uri.getPath();
 		String resource = RESOURCE_ROOT_DIRECTOR + path;
