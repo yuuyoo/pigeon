@@ -32,9 +32,9 @@ public class RootHandler implements HttpHandler {
 		String ip = inetAddress.getHostAddress();
 		String method = exchange.getRequestMethod();
 		URI uri = exchange.getRequestURI();
-		logger.info("request info client ip : {} method : {} request uri : {}", ip, method, uri);
-
 		String path = uri.getPath();
+		logger.info("client ip: {} method: {} path: {}", ip, method, path);
+
 		String resource = RESOURCE_ROOT_DIRECTOR + path;
 		File file = new File(resource);
 
@@ -84,7 +84,12 @@ public class RootHandler implements HttpHandler {
 		builder.append("<title>Index of " + path + "</title>");
 		builder.append("</head>");
 		builder.append("<body bgcolor=\"white\">");
-		builder.append("<h1>Index of " + path + "</h1><hr><pre><a href=\"../\">../</a></br>");
+		builder.append("<h1>Index of " + path + "</h1><hr>");
+		String parentPath = path.substring(0, path.lastIndexOf(Constants.SLASH));
+		if (null == parentPath || "".equals(parentPath)) {
+			parentPath = Constants.SLASH;
+		}
+		builder.append("<pre><a href=\"" + parentPath + "\">../</a></br>");
 
 		try (OutputStream os = exchange.getResponseBody()) {
 			File[] files = directory.getCanonicalFile().listFiles();
@@ -114,7 +119,7 @@ public class RootHandler implements HttpHandler {
 			String response = builder.toString();
 			exchange.getResponseHeaders().add("Content-Type:", "text/html;charset=utf-8");
 
-			byte[] bs = response.getBytes();
+			byte[] bs = response.getBytes(Constants.DEFAULT_CHARSET);
 			exchange.sendResponseHeaders(200, bs.length);
 			os.write(bs);
 		} catch (IOException e) {

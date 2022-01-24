@@ -3,7 +3,7 @@
 <configuration>
 	<property name="SERVER" value="pigeon" />
 	<property name="LOG_HOME" value="log" />
-	<property name="MAX_FILE_SIZE" value="20" />
+	<property name="MAX_FILE_SIZE" value="20MB" />
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
