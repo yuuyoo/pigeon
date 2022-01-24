@@ -29,11 +29,10 @@ public class RootHandler implements HttpHandler {
 
 		InetSocketAddress address = exchange.getLocalAddress();
 		InetAddress inetAddress = address.getAddress();
-		String hostName = inetAddress.getHostName();
 		String ip = inetAddress.getHostAddress();
 		String method = exchange.getRequestMethod();
 		URI uri = exchange.getRequestURI();
-		logger.info("request info client ip : {} method : {} request uri : {}", hostName, ip, method, uri);
+		logger.info("request info client ip : {} method : {} request uri : {}", ip, method, uri);
 
 		String path = uri.getPath();
 		String resource = RESOURCE_ROOT_DIRECTOR + path;
