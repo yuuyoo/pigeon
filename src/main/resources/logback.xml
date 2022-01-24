@@ -16,7 +16,7 @@
 		<File>${LOG_HOME}/${SERVER}.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
 			<FileNamePattern>
-				${LOG_HOME}/${SERVER}.%d{yyyy-MM-dd}.%i.zip
+				${LOG_HOME}/${SERVER}.%d{yyyy-MM-dd}.%i.log.zip
 			</FileNamePattern>
 			<maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
 		</rollingPolicy>
