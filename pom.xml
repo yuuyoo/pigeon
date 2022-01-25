@@ -91,6 +91,7 @@
 					<!--注意这玩意从编译结果目录开始算目录结构 -->
 					<excludes>
 						<exclude>**/*.properties</exclude>
+						<exclude>**/*.bat</exclude>
 					</excludes>
 				</configuration>
 			</plugin>

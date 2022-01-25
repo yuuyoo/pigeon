@@ -41,6 +41,14 @@
 			</includes>
 		</fileSet>
 
+		<fileSet>
+			<directory>${project.basedir}/src/main/resources</directory>
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<include>*.bat</include>
+			</includes>
+		</fileSet>
+
 		<!-- 把项目的jar打包到 bin 目录 -->
 		<fileSet>
 			<directory>${project.build.directory}</directory>
