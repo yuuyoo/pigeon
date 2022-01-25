@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <assembly>
+	<!--此处是打包名称的设置，最后是会生成一个finalName-id.format 文件在目录 target下 -->
+	<!--appendAssemblyId为false时则压缩包名称不追加id，默认下追加 -->
 	<id>bin</id>
+	<!-- 最终打包成一个用于发布的zip文件 -->
 	<formats>
 		<format>zip</format>
-		<format>tar.gz</format>
 	</formats>
 
-	<!-- Adds dependencies to zip package under lib directory -->
 	<dependencySets>
 		<dependencySet>
+			<!--是否将项目jar包打包到指定目录 -->
+			<useProjectArtifact>false</useProjectArtifact>
+			<!--将依赖jar包打到lib目录 -->
 			<outputDirectory>lib</outputDirectory>
+			<!--将依赖jar包不解压直接打包到目录 -->
+			<unpack>false</unpack>
 		</dependencySet>
 	</dependencySets>
 
 	<baseDirectory>/</baseDirectory>
 	<fileSets>
+		<!--通过fileSet节点可以将制定目录的指定文件打包到压缩文件的制定目录 -->
 		<fileSet>
 			<directory>${project.basedir}</directory>
 			<outputDirectory>/</outputDirectory>
@@ -25,10 +32,19 @@
 			</includes>
 		</fileSet>
 
-		<!-- 把项目自己编译出来的jar文件，打包进zip文件的根目录 -->
+		<!-- 把项目的配置文件，打包到压缩文件的 conf 目录 -->
+		<fileSet>
+			<directory>${project.basedir}/src/main/resources</directory>
+			<outputDirectory>conf</outputDirectory>
+			<includes>
+				<include>*.properties</include>
+			</includes>
+		</fileSet>
+
+		<!-- 把项目的jar打包到 bin 目录 -->
 		<fileSet>
 			<directory>${project.build.directory}</directory>
-			<outputDirectory></outputDirectory>
+			<outputDirectory>bin</outputDirectory>
 			<includes>
 				<include>*.jar</include>
 			</includes>
