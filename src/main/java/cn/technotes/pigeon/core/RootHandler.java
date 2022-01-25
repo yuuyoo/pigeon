@@ -22,8 +22,6 @@ public class RootHandler implements HttpHandler {
 
 	private static Logger logger = LoggerFactory.getLogger(RootHandler.class);
 
-	public static final String RESOURCE_ROOT_DIRECTOR = new File("").getAbsolutePath();
-
 	@Override
 	public void handle(HttpExchange exchange) throws UnsupportedEncodingException {
 
@@ -35,7 +33,7 @@ public class RootHandler implements HttpHandler {
 		String path = URLDecoder.decode(uri.getRawPath(), Constants.DEFAULT_CHARSET);
 		logger.info("client ip: {} method: {} path: {}", ip, method, path);
 
-		String resource = RESOURCE_ROOT_DIRECTOR + path;
+		String resource = Config.getInstance().getBaseDir() + path;
 		File file = new File(resource);
 
 		if (file.isFile()) {
