@@ -7,7 +7,7 @@
 	<groupId>cn.technotes</groupId>
 	<artifactId>pigeon</artifactId>
 	<packaging>jar</packaging>
-	<version>0.0.1-beta</version>
+	<version>0.0.2-SNAPSHOT</version>
 
 	<name>pigeon</name>
 	<url>https://github.com/yuuyoo/pigeon</url>
