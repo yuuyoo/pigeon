@@ -7,7 +7,7 @@
 	<groupId>cn.technotes</groupId>
 	<artifactId>pigeon</artifactId>
 	<packaging>jar</packaging>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1-beta</version>
 
 	<name>pigeon</name>
 	<url>https://github.com/yuuyoo/pigeon</url>
@@ -120,6 +120,11 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>2.1</version>
 			</plugin>
 		</plugins>
 	</build>

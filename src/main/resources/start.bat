@@ -1,1 +1,1 @@
-java -jar bin\pigeon-0.0.1-SNAPSHOT.jar
+java -jar bin\pigeon-0.0.1-beta.jar
