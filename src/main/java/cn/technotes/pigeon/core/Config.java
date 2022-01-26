@@ -38,7 +38,7 @@ public class Config {
 					baseDir = DEFAULT_BASE_DIR;
 				}
 				String port = prop.getProperty("port");
-				INSTANCE = new Config(baseDir, Integer.valueOf(port).intValue());
+				INSTANCE = new Config(baseDir, Integer.parseInt(port));
 			}
 		} catch (IOException e) {
 			logger.warn("Load config file {} fail {}", CONFIG_FILE, e);
