@@ -1,5 +1,7 @@
 package cn.technotes.pigeon.core;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,6 +22,8 @@ import com.sun.net.httpserver.HttpHandler;
 
 public class RootHandler implements HttpHandler {
 
+	// 4K 缓冲
+	private static final int BUFFER_SIZE = 4 * 1024;
 	private static Logger logger = LoggerFactory.getLogger(RootHandler.class);
 
 	@Override
@@ -120,25 +124,38 @@ public class RootHandler implements HttpHandler {
 			byte[] bs = response.getBytes(Constants.DEFAULT_CHARSET);
 			exchange.sendResponseHeaders(200, bs.length);
 			os.write(bs);
+
+			return;
 		} catch (IOException e) {
 			logger.error("directory {} handle error: {}", path, e);
 		}
+
+		notfoundHandler(exchange, path);
 	}
 
 	private void fileHandler(HttpExchange exchange, File file) {
-		try (FileInputStream inputStream = new FileInputStream(file); OutputStream os = exchange.getResponseBody();) {
-			String fileName = URLEncoder.encode(file.getName(), Constants.DEFAULT_CHARSET);
+		String filename = file.getName();
+		try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+				BufferedOutputStream out = new BufferedOutputStream(exchange.getResponseBody());) {
+
+			String fileName = URLEncoder.encode(filename, Constants.DEFAULT_CHARSET);
 			exchange.getResponseHeaders().add("Content-Disposition", "attachment;filename=" + fileName);
 			exchange.sendResponseHeaders(200, file.length());
-			byte[] fileBytes = new byte[(int) file.length()];
-			inputStream.read(fileBytes);
-			os.write(fileBytes);
+
+			byte[] buffer = new byte[BUFFER_SIZE];
+			int n;
+			while ((n = in.read(buffer)) != -1) {
+				out.write(buffer, 0, n);
+			}
+			return;
 		} catch (FileNotFoundException e) {
-			logger.error("file {} not exist", file.getName());
+			logger.error("file {} not exist", filename);
 
 		} catch (IOException e) {
-			logger.error("file {} handle error: {}", file.getName(), e);
+			logger.error("file {} handle error: {}", filename, e);
 		}
+
+		notfoundHandler(exchange, filename);
 	}
 
 }
